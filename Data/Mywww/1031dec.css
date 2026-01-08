@@ -1,0 +1,68 @@
+/* 这些是css代码 */
+
+h1 {
+    font-weight: 700;
+    font-style: italic;
+    text-align: left;
+}
+
+h2 {
+    font-weight: 700;
+    font-style: normal;
+    text-align: center;
+}
+
+a {
+    color: rgb(186, 233, 98);
+    font-size: 18px;
+    
+}
+
+a:hover{
+    color: rgb(238, 96, 205);
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.text {
+    /* color:wheat; */
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-indent: 2em;
+    
+}
+
+#randomThoughts {
+    /* color:wheat; */
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-indent: 2em;
+    /* 居右对齐 */
+    text-align: right;
+}
+
+div {
+    /* width: 400; */
+    /* height: 400; */
+
+    /* background-color: aquamarine; */
+    background-image: url(./image/pudong.jpg);
+    /* //图片色彩淡一点 */
+    /* background-color: rgba(173, 240, 255, 0.884); */
+    background-position: 100%;
+    background-attachment: fixed;
+    font-family: 楷体;
+}
+#normalThoughts {
+    /* background-color: rgba(255, 248, 220, 0.884); */
+    /* 格子小一点，位于屏幕中心 */
+    width: 800px;
+    margin: 0 auto;
+}
+#goto {
+    text-decoration-line: underline;
+}

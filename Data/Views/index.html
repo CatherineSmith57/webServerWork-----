@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            background-color: #e6f2ff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #0066cc;
+            text-align: center;
+        }
+        h2 {
+            color: #0066cc;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 5px;
+        }
+        p {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .info-section {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ welcome_message }}</h1>
+        <p>当前时间：{{ current_time }}</p>
+        {{ welcome_line }}
+        
+        <div class="info-section">
+            <h2>个人信息</h2>
+            <ul>
+                <li><strong>姓名：</strong>{{ name }}</li>
+                <li><strong>专业：</strong>{{ major }}</li>
+                <li><strong>年级：</strong>{{ grade }}</li>
+                <li><strong>学号：</strong>{{ student_id }}</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>静态页面链接</h2>
+            <ul>
+                <li><a href="/static/index.html">个人主页</a></li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>动态内容链接</h2>
+            <ul>
+                <li><a href="/courses">我的课程</a></li>
+                <li><a href="/books">我的书籍</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+注册路由：GET /
+注册路由：GET /welcome
+注册路由：GET /static/(.*)
+注册路由：GET /courses
+注册路由：GET /courses/detail
+注册路由：GET /books
+注册路由：GET /books/detail
+WebServer启动成功！访问 http://localhost:8080
+动态路由已注册：
+  - GET /                  首页
+  - GET /welcome           欢迎页
+  - GET /courses           课程列表
+  - GET /books             书籍列表
+  - GET /static/*          静态文件
+静态文件服务：支持HTML、CSS、JS、图片、视频、音频等
+收到请求：GET /
+收到请求：GET /books
+收到请求：GET /books/detail
+收到请求：GET /books
+收到请求：GET /books/detail
+收到请求：GET /books
+收到请求：GET /
+收到请求：GET /courses
+收到请求：GET /
+收到请求：GET /books
+收到请求：GET /books
+收到请求：GET /books/detail
+收到请求：GET /books
+收到请求：GET /books
+收到请求：GET /books/detail
+收到请求：GET /books
+收到请求：GET /
+收到请求：GET /static/index.html
+收到请求：GET /static/style.css
