@@ -68,7 +68,7 @@ public:
     void get(const std::string& path, RequestHandler handler);
     
     // 注册路由，支持POST方法
-    void post(const std::string& path, RequestHandler handler);
+    //void post(const std::string& path, RequestHandler handler);
     
     // 处理请求，根据路径找到对应的处理函数
     void handleRequest(const HttpRequest& request, HttpResponse& response);

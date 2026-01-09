@@ -30,20 +30,7 @@ public:
     void handleStaticFile(const HttpRequest& request, HttpResponse& response);
 };
 
-// 学生控制器
-class StudentController : public Controller {
-public:
-    StudentController();
-    
-    // 注册路由
-    void registerRoutes() override;
-    
-    // 处理学生列表请求
-    void handleStudentList(const HttpRequest& request, HttpResponse& response);
-    
-    // 处理单个学生信息请求
-    void handleStudentDetail(const HttpRequest& request, HttpResponse& response);
-};
+
 
 // 课程控制器
 class CourseController : public Controller {

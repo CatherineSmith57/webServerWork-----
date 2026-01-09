@@ -96,10 +96,10 @@ void Router::get(const std::string& path, RequestHandler handler) {
 }
 
 // 注册POST路由
-void Router::post(const std::string& path, RequestHandler handler) {
-    routes["POST"].push_back({path, handler});
-    std::cout << "注册路由：POST " << path << std::endl;
-}
+// void Router::post(const std::string& path, RequestHandler handler) {
+//     routes["POST"].push_back({path, handler});
+//     std::cout << "注册路由：POST " << path << std::endl;
+// }
 
 // 处理请求
 void Router::handleRequest(const HttpRequest& request, HttpResponse& response) {

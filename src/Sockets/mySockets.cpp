@@ -21,7 +21,7 @@ const string WEB_ROOT = "./Data/Mywww"; // 网页文件根目录 ./Data/Mywww
 
 // 初始化Winsock环境
 bool InitWinsock() {
-    WSADATA wsaData;
+    WSADATA wsaData; //WSADATA结构体变量，用于接收Winsock初始化后的核心信息
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         cerr << "Winsock初始化失败！错误码：" << WSAGetLastError() << endl;
         return false;

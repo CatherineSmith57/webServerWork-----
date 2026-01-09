@@ -38,31 +38,7 @@ std::string utf8ToGbk(const std::string& utf8Str) {
     return gbkStr;
 }
 
-std::vector<std::vector<std::string>> readStudentsFromFile(const std::string& filePath) {
-    std::vector<std::vector<std::string>> students;
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        return students;
-    }
-    
-    std::string line;
-    while (std::getline(file, line)) {
-        std::vector<std::string> student;
-        std::stringstream ss(line);
-        std::string field;
-        
-        while (std::getline(ss, field, ',')) {
-            student.push_back(field);
-        }
-        
-        if (!student.empty()) {
-            students.push_back(student);
-        }
-    }
-    
-    file.close();
-    return students;
-}
+
 
 // 读取课程数据
 std::vector<std::vector<std::string>> readCoursesFromFile(const std::string& filePath) {
@@ -344,7 +320,7 @@ void MainController::handleIndex(const HttpRequest& request, HttpResponse& respo
         templateEngine.setVariable("welcome_line", "");
     }
 */
-    
+
     // 渲染模板
     std::string renderedContent = templateEngine.render();
     
@@ -431,83 +407,6 @@ void MainController::handleStaticFile(const HttpRequest& request, HttpResponse& 
     response.setOK("text/html; charset=utf-8", content);
 }
 
-// StudentController实现
-StudentController::StudentController() {
-    registerRoutes();
-}
-
-void StudentController::registerRoutes() {
-    Router& router = Router::getInstance();
-    router.get("/students", std::bind(&StudentController::handleStudentList, this, std::placeholders::_1, std::placeholders::_2));
-    router.get("/students/detail", std::bind(&StudentController::handleStudentDetail, this, std::placeholders::_1, std::placeholders::_2));
-}
-
-void StudentController::handleStudentList(const HttpRequest& request, HttpResponse& response) {
-    // 创建模板引擎实例
-    TemplateEngine templateEngine;
-    
-    // 加载模板文件
-    if (!templateEngine.loadTemplateFromFile("./Data/Views/students.html")) {
-        response.setNotFound();
-        return;
-    }
-    
-    // 读取学生数据
-    auto students = readStudentsFromFile("./students.txt");
-    
-    // 生成学生列表HTML
-    std::stringstream studentListSS;
-    for (const auto& student : students) {
-        if (student.size() >= 5) {
-            studentListSS << "<tr><td>" << student[0] << "</td><td>" << student[1] << "</td><td>" << student[2] 
-                         << "</td><td>" << student[3] << "</td><td>" << student[4] 
-                         << "</td><td><a href='/students/detail?stuid=" << student[0] << "'>查看详情</a></td></tr>\n";
-        }
-    }
-    
-    // 设置模板变量
-    templateEngine.setVariable("student_list", studentListSS.str());
-    templateEngine.setVariable("search_conditions", "");
-    
-    // 渲染模板
-    std::string renderedContent = templateEngine.render();
-    
-    // 设置响应
-    response.setOK("text/html; charset=utf-8", renderedContent);
-}
-
-void StudentController::handleStudentDetail(const HttpRequest& request, HttpResponse& response) {
-    std::string studentId = request.getParam("stuid");
-    
-    // 读取学生数据
-    auto students = readStudentsFromFile("./students.txt");
-    
-    // 查找学生
-    std::string studentInfo = "<h1>学生详情</h1>";
-    bool found = false;
-    
-    for (const auto& student : students) {
-        if (student.size() >= 5 && student[0] == studentId) {
-            found = true;
-            studentInfo += "<p><strong>学号：</strong>" + student[0] + "</p>";
-            studentInfo += "<p><strong>姓名：</strong>" + student[1] + "</p>";
-            studentInfo += "<p><strong>年龄：</strong>" + student[2] + "</p>";
-            studentInfo += "<p><strong>性别：</strong>" + student[3] + "</p>";
-            studentInfo += "<p><strong>专业：</strong>" + student[4] + "</p>";
-            break;
-        }
-    }
-    
-    if (!found) {
-        studentInfo += "<p>未找到学号为 " + studentId + " 的学生</p>";
-    }
-    
-    studentInfo += "<p><a href='/students'>返回学生列表</a></p>";
-    studentInfo += "<p><a href='/'>返回首页</a></p>";
-    
-    response.setOK("text/html; charset=utf-8", studentInfo);
-}
-
 // CourseController实现
 CourseController::CourseController() {
     registerRoutes();
@@ -567,7 +466,7 @@ void CourseController::handleCourseDetail(const HttpRequest& request, HttpRespon
 
 // BookController实现
 BookController::BookController() {
-    registerRoutes();
+    registerRoutes();//
 }
 
 void BookController::registerRoutes() {
