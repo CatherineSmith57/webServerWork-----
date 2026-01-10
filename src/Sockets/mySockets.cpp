@@ -95,14 +95,14 @@ void HandleClient(SOCKET clientSock) {
 
     // 2. 解析HTTP请求
     HttpRequest request;
-    if (!request.parse(string(reqBuffer, recvLen))) { //parse 解析 改变request对象的成员 请求行 请求头 请求体
+    if (!request.parse(string(reqBuffer, recvLen))) { //parse 解析 改变request对象的成员 请求行 请求头
         closesocket(clientSock); //关闭连接
         return;
     }
 
     cout << "收到请求：" << request.method << " " << request.path << endl;
                         //HttpRequest::method       HttpRequest request
-                        // 请求方法：GET, POST等     解析HTTP请求
+                        // 请求方法：GET,( POST)等     解析HTTP请求
                             
     // 3. 处理请求
     HttpResponse response; // Router
@@ -176,7 +176,7 @@ int main() {
     }
 
     // 5. 开始监听
-    if (listen(listenSock, 5) == SOCKET_ERROR) { // 队列长度5
+    if (listen(listenSock, 5) == SOCKET_ERROR) { // 队列长度5  最大等待连接数
         cerr << "监听失败！错误码：" << WSAGetLastError() << endl;
         closesocket(listenSock);
         WSACleanup();
@@ -199,7 +199,7 @@ int main() {
         SOCKET clientSock = accept(listenSock, (sockaddr*)&clientAddr, &clientAddrLen);
         if (clientSock == INVALID_SOCKET) continue;
 
-        // 处理客户端请求（这里用单线程，作业若要求多线程可改CreateThread）
+        // 处理客户端请求（单线程）
         HandleClient(clientSock);
     }
 

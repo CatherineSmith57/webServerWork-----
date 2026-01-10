@@ -81,6 +81,7 @@ void HttpResponse::setForbidden() {
 // Router类实现
 Router::Router() {
     // 初始化路由表
+    // 路由表是一个map，key是请求方法，value是一个vector，vector中存储的是Route结构体
 }
 
 // 获取单例实例
@@ -95,11 +96,6 @@ void Router::get(const std::string& path, RequestHandler handler) {
     std::cout << "注册路由：GET " << path << std::endl;
 }
 
-// 注册POST路由
-// void Router::post(const std::string& path, RequestHandler handler) {
-//     routes["POST"].push_back({path, handler});
-//     std::cout << "注册路由：POST " << path << std::endl;
-// }
 
 // 处理请求
 void Router::handleRequest(const HttpRequest& request, HttpResponse& response) {
@@ -116,7 +112,7 @@ void Router::handleRequest(const HttpRequest& request, HttpResponse& response) {
     for (const auto& route : methodIt->second) {
         if (matchPath(route.path, request.path)) {
             // 找到匹配的路由，调用处理函数
-            route.handler(request, response);  // ？ handler怎么知道匹配哪个
+            route.handler(request, response);  // 因为在注册路由时，已经将路由表中的路径和处理函数绑定在一起了
             return;
         }
     }

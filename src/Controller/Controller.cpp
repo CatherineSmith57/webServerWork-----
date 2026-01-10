@@ -313,13 +313,6 @@ void MainController::handleIndex(const HttpRequest& request, HttpResponse& respo
     templateEngine.setVariable("student_id", "20250008");
     templateEngine.setVariable("welcome_line", "<p>欢迎你，访客！</p>");
 
-/*    // 根据是否使用URL参数决定是否显示欢迎行
-    if (nameParam.empty()) {
-        templateEngine.setVariable("welcome_line", "<p>欢迎你，访客！</p>");
-    } else {
-        templateEngine.setVariable("welcome_line", "");
-    }
-*/
 
     // 渲染模板
     std::string renderedContent = templateEngine.render();
@@ -328,6 +321,7 @@ void MainController::handleIndex(const HttpRequest& request, HttpResponse& respo
     response.setOK("text/html; charset=utf-8", renderedContent);
 }
 
+//BookController 实现
 void BookController::handleBookDetail(const HttpRequest& request, HttpResponse& response) {
     // 创建模板引擎实例
     TemplateEngine templateEngine;
@@ -504,7 +498,7 @@ void BookController::handleBookList(const HttpRequest& request, HttpResponse& re
             }
             
             // 获取书籍详细内容
-            std::string bookDetail = getBookDetail(book[1]);
+            //std::string bookDetail = getBookDetail(book[1]); //这个好像没用
             
             // 生成书籍列表项，书名作为链接
             bookListSS << "<tr>";
@@ -540,5 +534,5 @@ void BookController::handleBookList(const HttpRequest& request, HttpResponse& re
     std::string renderedContent = templateEngine.render();
     
     // 设置响应
-    response.setOK("text/html; charset=utf-8", renderedContent);
+    response.setOK("text/html; charset=utf-8", renderedContent); // 为什么一定是text/html
 }

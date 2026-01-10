@@ -20,7 +20,7 @@ void TemplateEngine::setTemplate(const std::string& templateContent) {
 
 // 设置变量值
 void TemplateEngine::setVariable(const std::string& key, const std::string& value) {
-    variables[key] = value;
+    variables[key] = value; //怎么设置？ // 变量值可以是任何字符串，包括HTML标签
 }
 
 // 渲染模板，返回替换后的内容
