@@ -87,7 +87,7 @@ void initControllers() {
 void HandleClient(SOCKET clientSock) {
     char reqBuffer[4096] = {0}; // 存储HTTP请求
     // 1. 读取浏览器的HTTP请求
-    int recvLen = recv(clientSock, reqBuffer, sizeof(reqBuffer)-1, 0);
+    int recvLen = recv(clientSock, reqBuffer, sizeof(reqBuffer)-1, 0); // why -1
     if (recvLen <= 0) {
         closesocket(clientSock);
         return;

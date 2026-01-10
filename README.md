@@ -69,7 +69,7 @@ webServerWork/
 
 ```bash
 # 使用GCC编译
-g++ -o webserver.exe src/Sockets/mySockets.cpp src/Controller/Controller.cpp src/Router/Router.cpp src/TemplateEngine/TemplateEngine.cpp -lws2_32 && .\webserver.exe
+g++ -o webserver.exe src/Sockets/mySockets.cpp src/Controller/Controller.cpp src/Router/Router.cpp src/TemplateEngine/TemplateEngine.cpp -lws2_32
 
 # 使用MSVC编译（Visual Studio命令提示符）
 cl src/Sockets/mySockets.cpp src/Controller/Controller.cpp src/Router/Router.cpp src/TemplateEngine/TemplateEngine.cpp ws2_32.lib
@@ -88,18 +88,18 @@ cl src/Sockets/mySockets.cpp src/Controller/Controller.cpp src/Router/Router.cpp
 ```
 注册路由：GET /
 注册路由：GET /welcome
-注册路由：GET /students
-注册路由：GET /students/detail
+注册路由：GET /static/(.*)
 注册路由：GET /courses
 注册路由：GET /courses/detail
+注册路由：GET /books
+注册路由：GET /books/detail
 WebServer启动成功！访问 http://localhost:8080
 动态路由已注册：
   - GET /                  首页
   - GET /welcome           欢迎页
-  - GET /students          学生列表
-  - GET /students/detail   学生详情
   - GET /courses           课程列表
-  - GET /courses/detail    课程详情
+  - GET /books             书籍列表
+  - GET /static/*          静态文件
 静态文件服务：支持HTML、CSS、JS、图片、视频、音频等
 ```
 
@@ -108,7 +108,6 @@ WebServer启动成功！访问 http://localhost:8080
 ```
 http://localhost:8080          # 访问动态首页
 http://localhost:8080/index.html  # 访问静态首页
-http://localhost:8080/students     # 访问学生列表
 ```
 
 ## 核心功能说明
@@ -120,11 +119,9 @@ http://localhost:8080/students     # 访问学生列表
 | 路径 | 方法 | 功能 |
 |------|------|------|
 | `/` | GET | 动态生成的首页 |
-| `/welcome` | GET | 动态生成的欢迎页 |
-| `/students` | GET | 学生列表 |
-| `/students/detail` | GET | 学生详情 |
 | `/courses` | GET | 课程列表 |
-| `/courses/detail` | GET | 课程详情 |
+| `/books` | GET | 图书列表 |
+| `/index.html` | GET | 静态首页 |
 
 ### 2. 静态文件服务
 
@@ -132,16 +129,13 @@ http://localhost:8080/students     # 访问学生列表
 
 - **HTML/CSS/JS**：网页和脚本文件
 - **图片**：JPG、PNG、WEBP等
-- **视频**：MP4等
-- **音频**：WAV等
 
 ### 3. URL参数解析
 
 支持URL查询参数，如：
 
 ```
-http://localhost:8080/?name=张三&age=20
-http://localhost:8080/students/detail?stuid=1001
+http://localhost:8080/?name=三体
 ```
 
 ### 4. 模板引擎
@@ -176,7 +170,7 @@ http://localhost:8080/students/detail?stuid=1001
 - **Router**：路由系统，处理URL映射和请求分发
 - **Controller**：控制器基类，派生出具体的业务控制器
   - **MainController**：处理首页和欢迎页
-  - **StudentController**：处理学生相关请求
+  - **BookController**：处理图书相关请求
   - **CourseController**：处理课程相关请求
 - **TemplateEngine**：模板引擎，用于处理HTML模板中的变量替换
 
@@ -229,19 +223,7 @@ http://localhost:8080/
 ### 访问带参数的首页
 
 ```bash
-http://localhost:8080/?name=张三
-```
-
-### 访问学生列表
-
-```bash
-http://localhost:8080/students
-```
-
-### 访问特定学生详情
-
-```bash
-http://localhost:8080/students/detail?stuid=1001
+http://localhost:8080/books?name=三体
 ```
 
 ### 访问静态HTML文件
@@ -316,37 +298,10 @@ A: 请检查：
 2. 文件路径是否正确
 3. 文件名大小写是否正确（Windows下不区分大小写，但建议保持一致）
 
-## 编译和运行命令
-
-### 编译命令
-
-```bash
-g++ -o webserver.exe src/Sockets/mySockets.cpp src/Controller/Controller.cpp src/Router/Router.cpp src/TemplateEngine/TemplateEngine.cpp -lws2_32
-```
-
-### 运行命令
-
-```bash
-./webserver.exe
-```
-
-### 测试命令
-
-```bash
-# 测试首页
-curl http://localhost:8080/
-
-# 测试带参数的首页
-curl "http://localhost:8080/?name=张三"
-
-# 测试静态文件
-curl http://localhost:8080/index.html
-```
-
 ## 作者信息
 
 - **作者**：Zoe Tian
-- **专业**：计算机科学与技术
+- **专业**：计算机类
 - **日期**：2026年1月
 - **学校**：武汉大学
 
