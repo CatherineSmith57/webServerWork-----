@@ -42,9 +42,7 @@ public:
     
     // 处理课程列表请求
     void handleCourseList(const HttpRequest& request, HttpResponse& response);
-    
-    // 处理课程详情请求
-    void handleCourseDetail(const HttpRequest& request, HttpResponse& response);
+
 };
 
 // 书籍控制器

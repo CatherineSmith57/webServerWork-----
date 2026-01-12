@@ -286,7 +286,9 @@ void MainController::registerRoutes() {
     router.get("/", std::bind(&MainController::handleIndex, this, std::placeholders::_1, std::placeholders::_2));
     router.get("/welcome", std::bind(&MainController::handleWelcome, this, std::placeholders::_1, std::placeholders::_2));
     router.get("/static/(.*)", std::bind(&MainController::handleStaticFile, this, std::placeholders::_1, std::placeholders::_2));
+    std::cout << "MainController registered routes" << std::endl << std::endl;
 }
+/*std::bind(&类名::成员函数名, 类实例指针/引用, 参数1, 参数2, ...)  返回一个 可调用对象 （符合 std::function 的要求）*/
 
 void MainController::handleIndex(const HttpRequest& request, HttpResponse& response) {
     // 创建模板引擎实例
@@ -321,36 +323,6 @@ void MainController::handleIndex(const HttpRequest& request, HttpResponse& respo
     response.setOK("text/html; charset=utf-8", renderedContent);
 }
 
-//BookController 实现
-void BookController::handleBookDetail(const HttpRequest& request, HttpResponse& response) {
-    // 创建模板引擎实例
-    TemplateEngine templateEngine;
-    
-    // 加载模板文件
-    if (!templateEngine.loadTemplateFromFile("./Data/Views/book_detail.html")) {
-        response.setNotFound();
-        return;
-    }
-    
-    // 获取查询参数name并进行URL解码
-    std::string bookName = request.getParam("name");
-    bookName = urlDecode(bookName);
-    
-    // 获取书籍详细内容
-    std::string bookDetail = getBookDetail(bookName);
-    
-    // 设置模板变量
-    templateEngine.setVariable("title", "书籍详情");
-    templateEngine.setVariable("book_name", bookName);
-    templateEngine.setVariable("book_detail", bookDetail.empty() ? "暂无详细信息" : bookDetail);
-    templateEngine.setVariable("current_time", getCurrentTime());
-    
-    // 渲染模板
-    std::string renderedContent = templateEngine.render();
-    
-    // 设置响应
-    response.setOK("text/html; charset=utf-8", renderedContent);
-}
 
 void MainController::handleWelcome(const HttpRequest& request, HttpResponse& response) {
     // 创建模板引擎实例
@@ -367,10 +339,11 @@ void MainController::handleWelcome(const HttpRequest& request, HttpResponse& res
     templateEngine.setVariable("welcome_message", "欢迎使用WebServer");
     templateEngine.setVariable("current_time", getCurrentTime());
     templateEngine.setVariable("username", "访客");
-    templateEngine.setVariable("name", "");
-    templateEngine.setVariable("major", "");
-    templateEngine.setVariable("grade", "");
-    templateEngine.setVariable("student_id", "");
+    templateEngine.setVariable("name", "Zoe Tian");
+    templateEngine.setVariable("major", "计算机类");
+    templateEngine.setVariable("grade", "大一");
+    templateEngine.setVariable("student_id", "20250008");
+    templateEngine.setVariable("welcome_line", "<p>欢迎你，访客！</p>");
     
     // 渲染模板
     std::string renderedContent = templateEngine.render();
@@ -409,7 +382,7 @@ CourseController::CourseController() {
 void CourseController::registerRoutes() {
     Router& router = Router::getInstance();
     router.get("/courses", std::bind(&CourseController::handleCourseList, this, std::placeholders::_1, std::placeholders::_2));
-    router.get("/courses/detail", std::bind(&CourseController::handleCourseDetail, this, std::placeholders::_1, std::placeholders::_2));
+    std::cout << "CourseController registered routes" << std::endl << std::endl;
 }
 
 void CourseController::handleCourseList(const HttpRequest& request, HttpResponse& response) {
@@ -422,9 +395,7 @@ void CourseController::handleCourseList(const HttpRequest& request, HttpResponse
         return;
     }
     
-    // 获取查询参数name并进行URL解码
-    std::string nameParam = request.getParam("name");
-    nameParam = urlDecode(nameParam);
+    
     
     // 读取课程数据
     auto courses = readCoursesFromFile("./Data/text_data/courses.txt");
@@ -439,7 +410,7 @@ void CourseController::handleCourseList(const HttpRequest& request, HttpResponse
     
     // 设置模板变量
     templateEngine.setVariable("title", "我的课程");
-    templateEngine.setVariable("username", nameParam.empty() ? "访客" : nameParam);
+    templateEngine.setVariable("username", "访客");
     templateEngine.setVariable("current_time", getCurrentTime());
     templateEngine.setVariable("course_list", courseListSS.str());
     
@@ -450,13 +421,6 @@ void CourseController::handleCourseList(const HttpRequest& request, HttpResponse
     response.setOK("text/html; charset=utf-8", renderedContent);
 }
 
-void CourseController::handleCourseDetail(const HttpRequest& request, HttpResponse& response) {
-    // 重定向到课程列表
-    std::string courseId = request.getParam("courseid");
-    response.status = "302 Found";
-    response.contentType = "text/html; charset=utf-8";
-    response.body = "<html><body><h1>课程详情</h1><p>已重定向到课程列表</p><a href='/courses'>返回课程列表</a></body></html>";
-}
 
 // BookController实现
 BookController::BookController() {
@@ -467,6 +431,7 @@ void BookController::registerRoutes() {
     Router& router = Router::getInstance();
     router.get("/books", std::bind(&BookController::handleBookList, this, std::placeholders::_1, std::placeholders::_2));
     router.get("/books/detail", std::bind(&BookController::handleBookDetail, this, std::placeholders::_1, std::placeholders::_2));
+    std::cout << "BookController registered routes" << std::endl << std::endl;
 }
 
 void BookController::handleBookList(const HttpRequest& request, HttpResponse& response) {
@@ -534,5 +499,43 @@ void BookController::handleBookList(const HttpRequest& request, HttpResponse& re
     std::string renderedContent = templateEngine.render();
     
     // 设置响应
-    response.setOK("text/html; charset=utf-8", renderedContent); // 为什么一定是text/html
+    response.setOK("text/html; charset=utf-8", renderedContent);
+}
+
+void BookController::handleBookDetail(const HttpRequest& request, HttpResponse& response) {
+    // 创建模板引擎实例
+    TemplateEngine templateEngine;
+    
+    // 加载模板文件
+    if (!templateEngine.loadTemplateFromFile("./Data/Views/book_detail.html")) {
+        response.setNotFound();
+        return;
+    }
+    
+    // 获取查询参数name并进行URL解码
+    std::string bookName = request.getParam("name");
+    bookName = urlDecode(bookName);
+    
+    if(bookName == ""){
+        templateEngine.setVariable("title", "书籍详情");
+        templateEngine.setVariable("book_name", "");
+        templateEngine.setVariable("book_detail", "您未选择书籍");
+        templateEngine.setVariable("current_time", getCurrentTime());
+    }
+    else
+    {
+    // 获取书籍详细内容
+    std::string bookDetail = getBookDetail(bookName);
+    
+    // 设置模板变量
+    templateEngine.setVariable("title", "书籍详情");
+    templateEngine.setVariable("book_name", bookName);
+    templateEngine.setVariable("book_detail", bookDetail.empty() ? "暂无详细信息" : bookDetail);
+    templateEngine.setVariable("current_time", getCurrentTime());
+    }
+    // 渲染模板
+    std::string renderedContent = templateEngine.render();
+    
+    // 设置响应
+    response.setOK("text/html; charset=utf-8", renderedContent);
 }

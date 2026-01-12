@@ -89,10 +89,15 @@ cl src/Sockets/mySockets.cpp src/Controller/Controller.cpp src/Router/Router.cpp
 注册路由：GET /
 注册路由：GET /welcome
 注册路由：GET /static/(.*)
+MainController registered routes
+
 注册路由：GET /courses
-注册路由：GET /courses/detail
+CourseController registered routes
+
 注册路由：GET /books
 注册路由：GET /books/detail
+BookController registered routes
+
 WebServer启动成功！访问 http://localhost:8080
 动态路由已注册：
   - GET /                  首页
@@ -100,15 +105,39 @@ WebServer启动成功！访问 http://localhost:8080
   - GET /courses           课程列表
   - GET /books             书籍列表
   - GET /static/*          静态文件
-静态文件服务：支持HTML、CSS、JS、图片、视频、音频等
+静态文件服务：支持HTML、CSS、JS、图片等
 ```
 
-3. 在浏览器中访问：
 
+## 使用示例
+
+### 访问动态首页
+
+```bash
+http://localhost:8080/
 ```
-http://localhost:8080          # 访问动态首页
-http://localhost:8080/index.html  # 访问静态首页
+
+### 访问带参数的页面
+
+```bash
+http://localhost:8080/books?name=三体 #访问书籍列表
+http://localhost:8080/books/detail?name=《三体》 #访问书籍详情
 ```
+
+### 访问静态HTML文件
+
+```bash
+http://localhost:8080/index.html #访问静态首页 方式一
+http://localhost:8080/static//index.html # 访问静态首页 方式二（注意：路径中包含双斜杠）
+http://localhost:8080/1031.html
+```
+
+### 访问图片资源
+
+```bash
+http://localhost:8080/image/pudong.jpg
+```
+
 
 ## 核心功能说明
 
@@ -128,14 +157,14 @@ http://localhost:8080/index.html  # 访问静态首页
 支持多种文件类型的静态服务，自动识别MIME类型：
 
 - **HTML/CSS/JS**：网页和脚本文件
-- **图片**：JPG、PNG、WEBP等
+- **图片**：JPG、PNG
 
 ### 3. URL参数解析
 
 支持URL查询参数，如：
 
 ```
-http://localhost:8080/?name=三体
+http://localhost:8080/books/detail?name=《三体》
 ```
 
 ### 4. 模板引擎
@@ -211,33 +240,6 @@ std::string htmlContent = engine.render();
 - **变量替换**：`{{ variable_name }}`
 - **支持HTML标签**：变量值可以包含HTML标签
 - **自动忽略未定义变量**：未定义的变量将保持原样
-
-## 使用示例
-
-### 访问动态首页
-
-```bash
-http://localhost:8080/
-```
-
-### 访问带参数的首页
-
-```bash
-http://localhost:8080/books?name=三体
-```
-
-### 访问静态HTML文件
-
-```bash
-http://localhost:8080/index.html
-http://localhost:8080/1031.html
-```
-
-### 访问图片资源
-
-```bash
-http://localhost:8080/image/pudong.jpg
-```
 
 ## 代码说明
 

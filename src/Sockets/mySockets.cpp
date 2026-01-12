@@ -40,23 +40,20 @@ string GetContentType(const string& filename) {
     if (ext == ".js") return "application/javascript";
     if (ext == ".png") return "image/png";
     if (ext == ".jpg" || ext == ".jpeg") return "image/jpeg";
-    if (ext == ".gif") return "image/gif";
-    if (ext == ".mp4") return "video/mp4";
-    if (ext == ".mp3") return "audio/mpeg";
-    if (ext == ".wav") return "audio/wav";
-    if (ext == ".ico") return "image/x-icon";
     return "text/plain";
 }
 
 // 读取本地文件内容
 bool ReadFile(const string& filepath, string& content) {
     ifstream file(filepath, ios::binary);
+    /*二进制模式 ：使用 ios::binary 打开文件非常重要，
+    确保能正确读取图片、视频等非文本文件（否则会破坏文件的二进制结构）。*/
     if (!file.is_open()) return false;
 
     // 读取全部内容
     stringstream buffer;
-    buffer << file.rdbuf();
-    content = buffer.str();
+    buffer << file.rdbuf();//file.rdbuf() 返回文件的 缓冲区指针 （指向文件内容的内存区域）一次性读取所有内容
+    content = buffer.str(); //buffer.str() 将缓冲区内容转换为字符串
     file.close();
     return true;
 }
@@ -87,7 +84,8 @@ void initControllers() {
 void HandleClient(SOCKET clientSock) {
     char reqBuffer[4096] = {0}; // 存储HTTP请求
     // 1. 读取浏览器的HTTP请求
-    int recvLen = recv(clientSock, reqBuffer, sizeof(reqBuffer)-1, 0); // why -1
+    int recvLen = recv(clientSock, reqBuffer, sizeof(reqBuffer)-1, 0); //-1 预留一个字节 存储字符串结束符 '\0'
+    //recv（） 从已连接的套接字接收数据
     if (recvLen <= 0) {
         closesocket(clientSock);
         return;
@@ -95,21 +93,21 @@ void HandleClient(SOCKET clientSock) {
 
     // 2. 解析HTTP请求
     HttpRequest request;
-    if (!request.parse(string(reqBuffer, recvLen))) { //parse 解析 改变request对象的成员 请求行 请求头
+    if (!request.parse(string(reqBuffer, recvLen))) { //parse 解析 写入request对象的成员 请求行 请求头
         closesocket(clientSock); //关闭连接
         return;
     }
 
     cout << "收到请求：" << request.method << " " << request.path << endl;
-                        //HttpRequest::method       HttpRequest request
-                        // 请求方法：GET,( POST)等     解析HTTP请求
+                        //HttpRequest::method       HttpRequest path
+                        // 请求方法：GET,( POST)等    路径
                             
     // 3. 处理请求
-    HttpResponse response; // Router
+    HttpResponse response; // 响应对象
     
     // 先尝试使用路由处理动态请求 //动态优先级更高
     Router::getInstance().handleRequest(request, response); //这里用MVC
-    //Router::getInstance() 
+    //Router::getInstance()  单例模式  全局唯一实例
     // 如果路由返回404，尝试处理为静态文件请求
     if (response.status == "404 Not Found") {
         string filePath;
@@ -118,7 +116,7 @@ void HandleClient(SOCKET clientSock) {
         if (request.path.find("/static/") == 0) {
             // 静态文件请求，直接映射到Data/Mywww目录
             string staticPath = request.path.substr(8); // 去掉"/static/"  //从字符串的第 8 个索引位置开始，截取后面的内容
-            filePath = "./Data/Mywww/" + staticPath;
+            filePath = WEB_ROOT + staticPath;
         } else {
             // 其他路径，直接映射到WEB_ROOT
             filePath = WEB_ROOT + request.path;
@@ -131,7 +129,7 @@ void HandleClient(SOCKET clientSock) {
             if (ReadFile(filePath, content)) {
                 response.setOK(GetContentType(filePath), content);
             } else {
-                response.setNotFound();
+                response.setNotFound(); // 404 Not Found
             }
         } else {
             // 路径不安全，返回403
@@ -142,6 +140,7 @@ void HandleClient(SOCKET clientSock) {
     // 4. 发送响应给浏览器
     string respStr = response.toString();
     send(clientSock, respStr.c_str(), respStr.size(), 0);
+    //send（） 向已连接的套接字发送数据 
 
     // 5. 关闭连接
     closesocket(clientSock);
@@ -155,7 +154,7 @@ int main() {
     initControllers();
 
     // 3. 创建监听套接字（TCP）
-    SOCKET listenSock = socket(AF_INET, SOCK_STREAM, 0);
+    SOCKET listenSock = socket(AF_INET, SOCK_STREAM, 0); // 创建套接字  AF_INET IPv4协议  SOCK_STREAM TCP协议  0 系统默认协议
     if (listenSock == INVALID_SOCKET) {
         cerr << "创建套接字失败！错误码：" << WSAGetLastError() << endl;
         WSACleanup();
@@ -165,7 +164,7 @@ int main() {
     // 4. 绑定端口和IP
     SOCKADDR_IN serverAddr = {}; // 初始化结构体
     serverAddr.sin_family = AF_INET;         // IPv4
-    serverAddr.sin_addr.S_un.S_addr = INADDR_ANY; // 监听所有网卡（正确的访问方式）
+    serverAddr.sin_addr.S_un.S_addr = INADDR_ANY; // 监听所有网卡（正确的访问方式） 监听所有IP地址的意思是，服务器会接受来自任何IP地址的连接请求。
     serverAddr.sin_port = htons(PORT);       // 端口转网络字节序
     int ret = ::bind(listenSock, (sockaddr*)&serverAddr, sizeof(SOCKADDR_IN));
     if ( ret == SOCKET_ERROR) {
@@ -190,7 +189,7 @@ int main() {
     cout << "  - GET /courses           课程列表" << endl;
     cout << "  - GET /books             书籍列表" << endl;
     cout << "  - GET /static/*          静态文件" << endl;
-    cout << "静态文件服务：支持HTML、CSS、JS、图片、视频、音频等" << endl;
+    cout << "静态文件服务：支持HTML、CSS、JS、图片等" << endl;
 
     // 6. 循环接收客户端连接
     while (true) {

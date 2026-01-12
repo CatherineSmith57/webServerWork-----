@@ -13,10 +13,10 @@ class HttpResponse;
 
 // 处理函数类型定义
 typedef std::function<void(const HttpRequest&, HttpResponse&)> RequestHandler; // 处理函数类型，参数是HttpRequest和HttpResponse引用
-//这是什么 ？ 这是一个函数指针，指向一个函数，这个函数的参数是HttpRequest和HttpResponse引用，返回值是void
+//这是一个函数指针，指向一个函数，这个函数的参数是HttpRequest和HttpResponse引用，返回值是void
 
-// URL参数类型，键值对
-using UrlParams = std::vector<std::pair<std::string, std::string>>; // URL参数类型，键值对，例如name=test&age=18
+// URL参数类型，键值对 例如name=test
+using UrlParams = std::vector<std::pair<std::string, std::string>>;
 
 // HTTP请求类
 class HttpRequest {
@@ -25,7 +25,7 @@ public:
     std::string path;        // 请求路径：/index.html
     std::string fullPath;    // 完整路径，包含查询参数：/index.html?name=test
     std::string version;     // HTTP版本：HTTP/1.1
-    UrlParams params;        // URL参数：name=test&age=18
+    UrlParams params;        // URL参数：name=test
     
     // 从原始请求字符串解析HTTP请求
     bool parse(const std::string& rawRequest);
@@ -67,8 +67,6 @@ public:
     // 注册路由，支持GET方法
     void get(const std::string& path, RequestHandler handler);
     
-    // 注册路由，支持POST方法
-    //void post(const std::string& path, RequestHandler handler);
     
     // 处理请求，根据路径找到对应的处理函数
     void handleRequest(const HttpRequest& request, HttpResponse& response);
