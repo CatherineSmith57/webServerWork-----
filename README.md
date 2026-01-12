@@ -127,9 +127,8 @@ http://localhost:8080/books/detail?name=《三体》 #访问书籍详情
 ### 访问静态HTML文件
 
 ```bash
-http://localhost:8080/index.html #访问静态首页 方式一
-http://localhost:8080/static//index.html # 访问静态首页 方式二（注意：路径中包含双斜杠）
-http://localhost:8080/1031.html
+http://localhost:8080/index.html #访问静态首页
+http://localhost:8080/1031.html #访问1031.html文件
 ```
 
 ### 访问图片资源

@@ -116,7 +116,7 @@ void HandleClient(SOCKET clientSock) {
         if (request.path.find("/static/") == 0) {
             // 静态文件请求，直接映射到Data/Mywww目录
             string staticPath = request.path.substr(8); // 去掉"/static/"  //从字符串的第 8 个索引位置开始，截取后面的内容
-            filePath = WEB_ROOT + staticPath;
+            filePath = "./Data/Mywww/" + staticPath;
         } else {
             // 其他路径，直接映射到WEB_ROOT
             filePath = WEB_ROOT + request.path;

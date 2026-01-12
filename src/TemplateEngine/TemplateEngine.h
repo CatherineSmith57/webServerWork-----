@@ -29,7 +29,7 @@ public:
 private:
     std::string templateContent;           // 模板内容
     std::map<std::string, std::string> variables; // 变量映射表
-    std::regex variableRegex;              // 正则表达式，用于匹配{{ variable }}语法 // ?
+    std::regex variableRegex;              // 正则表达式，用于匹配{{ variable }}语法 
 };
 
 #endif // TEMPLATE_ENGINE_H

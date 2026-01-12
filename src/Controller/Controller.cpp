@@ -8,37 +8,6 @@
 #include <ctime>
 #include <Windows.h>
 
-// GBK到UTF-8的转换函数
-std::string gbkToUtf8(const std::string& gbkStr) {
-    std::string utf8Str;
-    int len = MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, NULL, 0);
-    wchar_t* wstr = new wchar_t[len + 1];
-    MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, wstr, len);
-    len = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-    char* str = new char[len + 1];
-    WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL);
-    utf8Str = str;
-    delete[] wstr;
-    delete[] str;
-    return utf8Str;
-}
-
-// UTF-8到GBK的转换函数（备用）
-std::string utf8ToGbk(const std::string& utf8Str) {
-    std::string gbkStr;
-    int len = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
-    wchar_t* wstr = new wchar_t[len + 1];
-    MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, wstr, len);
-    len = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
-    char* str = new char[len + 1];
-    WideCharToMultiByte(CP_ACP, 0, wstr, -1, str, len, NULL, NULL);
-    gbkStr = str;
-    delete[] wstr;
-    delete[] str;
-    return gbkStr;
-}
-
-
 
 // 读取课程数据
 std::vector<std::vector<std::string>> readCoursesFromFile(const std::string& filePath) {
@@ -207,11 +176,8 @@ std::string getBookDetail(const std::string& bookName) {
     // 将缓冲区转换为字符串
     std::string content(buffer.begin(), buffer.end());
     
-    // 将GBK编码的整个内容转换为UTF-8
-    std::string utf8Content = gbkToUtf8(content);
-    
-    // 现在处理UTF-8内容
-    std::stringstream ss(utf8Content);
+
+    std::stringstream ss(content);
     std::string line;
     std::stringstream detailSS;
     bool foundBook = false;

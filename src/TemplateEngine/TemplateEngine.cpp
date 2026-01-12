@@ -4,7 +4,7 @@
 #include <iostream>
 
 // 构造函数
-TemplateEngine::TemplateEngine() : variableRegex(R"(\{\{\s*([a-zA-Z0-9_]+)\s*\}\})", std::regex_constants::ECMAScript) {
+TemplateEngine::TemplateEngine() : variableRegex(R"(\{\{\s*([a-zA-Z0-9_]+)\s*\}\})", std::regex_constants::ECMAScript) { //原始字符串字面量 （用 R"()" 包裹）| ECMAScript 用于指定正则表达式使用哪种语法规范：（默认）：JavaScript 风格的正则语法，功能最丰富
     // 初始化正则表达式，匹配{{ variable }}语法
 }
 
@@ -20,18 +20,18 @@ void TemplateEngine::setTemplate(const std::string& templateContent) {
 
 // 设置变量值
 void TemplateEngine::setVariable(const std::string& key, const std::string& value) {
-    variables[key] = value; //怎么设置？ // 变量值可以是任何字符串，包括HTML标签
+    variables[key] = value; // 变量值可以是任何字符串，包括HTML标签
 }
 
 // 渲染模板，返回替换后的内容
 std::string TemplateEngine::render() {
     std::string result = templateContent;
-    std::smatch match;
+    std::smatch match; // 用于存储匹配结果
     
     // 使用正则表达式匹配所有{{ variable }}格式的内容
     std::string tempResult;
-    std::string::const_iterator searchStart(result.cbegin());
-    std::string::const_iterator startPos = result.cbegin();
+    std::string::const_iterator searchStart = result.cbegin(); // 搜索开始位置
+    std::string::const_iterator startPos = result.cbegin(); // 上一个匹配结束位置
     
     while (std::regex_search(searchStart, result.cend(), match, variableRegex)) {
         // 添加匹配前的内容
